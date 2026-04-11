@@ -1,0 +1,58 @@
+commands:
+  bind-server:
+    name: 绑定服务器
+    description: 绑定CSMS服务器
+    usage: '/绑定服务器 <服务器地址> <管理员用户名> <管理员Token>'
+  query-score:
+    name: 查询积分
+    description: 查询积分和排名
+    usage: '/查询积分 [用户名]'
+  adjust-score:
+    name: 调整积分
+    description: 调整积分（仅管理员）
+    usage: '/调整积分 <用户名> <分数> <原因>'
+  bind-qq:
+    name: 绑定QQ
+    description: 绑定QQ号与系统账号
+    usage: '/绑定QQ <用户名>'
+  ranking:
+    name: 排行榜
+    description: 显示积分排行榜
+    usage: '/排行榜 [数量]'
+  statistics:
+    name: 统计
+    description: 显示积分统计信息
+    usage: '/统计 [用户名]'
+
+messages:
+  success:
+    server-configured: 服务器配置成功
+    server-validated: 服务器配置验证成功
+    qq-bound: QQ绑定成功
+    qq-unbound: QQ解除绑定成功
+    score-adjusted: 积分调整成功
+    user-created: 用户创建成功
+  error:
+    no-server-config: 未配置CSMS服务器，请先使用 /绑定服务器 命令配置
+    invalid-token: 无效的Token格式，Token必须由数字和英文大写字母组成
+    invalid-qq: 无效的QQ号码格式
+    invalid-score: 分数必须在 -1000 到 1000 之间
+    invalid-username: 用户名不能为空且长度不能超过50个字符
+    invalid-description: 描述信息长度不能超过255个字符
+    invalid-limit: 数量必须在 1 到 50 之间
+    server-not-found: 服务器未找到
+    user-not-found: 用户未找到
+    user-already-bound: 该QQ号已绑定其他用户
+    user-not-bound: 该QQ号未绑定任何用户
+    api-request-failed: API请求失败
+    insufficient-permission: 权限不足，仅管理员可执行此操作
+    binding-failed: 绑定失败
+    unbinding-failed: 解除绑定失败
+    configuration-failed: 配置保存失败
+  help:
+    bind-server: 绑定CSMS服务器\n用法：/绑定服务器 <服务器地址> <管理员用户名> <管理员Token>\n示例：/绑定服务器 https://example.com admin ABC123
+    query-score: 查询积分\n用法：/查询积分 [用户名]\n示例：/查询积分 张三
+    adjust-score: 调整积分\n用法：/调整积分 <用户名> <分数> <原因>\n示例：/调整积分 张三 +5 表现优秀
+    bind-qq: 绑定QQ\n用法：/绑定QQ <用户名>\n示例：/绑定QQ 张三
+    ranking: 排行榜\n用法：/排行榜 [数量]\n示例：/排行榜 10
+    statistics: 统计\n用法：/统计 [用户名>\n示例：/统计 张三
