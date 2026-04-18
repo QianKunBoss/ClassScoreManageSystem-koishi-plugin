@@ -65,25 +65,26 @@ export class ServerConfigService {
     return new CsmsApiService(this.ctx, config.address, config.token)
   }
 
-  async validateConfig(address: string, username: string, token: string): Promise<{ valid: boolean; error?: string; actualUsername?: string }> {
+  async validateConfig(address: string, username: string, token: string): Promise<{ valid: boolean; error?: string; actualUsername?: string; newToken?: string }> {
     try {
       // 自动移除 /api/global_api.php 后缀
       const baseUrl = address.replace(/\/api\/global_api\.php$/, '').replace(/\/$/, '')
       const api = new CsmsApiService(this.ctx, baseUrl, token)
       const result = await api.validateToken()
-      
+
       if (result.valid) {
         // 如果提供的用户名与实际登录的管理员用户名不同，给出提示
         if (result.username && result.username !== username) {
-          return { 
-            valid: true, 
+          return {
+            valid: true,
             actualUsername: result.username,
-            error: `警告：提供的用户名 "${username}" 与实际登录的管理员 "${result.username}" 不一致` 
+            newToken: result.newToken,
+            error: `警告：提供的用户名 "${username}" 与实际登录的管理员 "${result.username}" 不一致`
           }
         }
-        return { valid: true, actualUsername: result.username }
+        return { valid: true, actualUsername: result.username, newToken: result.newToken }
       }
-      
+
       return { valid: false, error: 'Token 验证失败，请检查 Token 是否正确' }
     } catch (error: any) {
       this.ctx.logger.error('验证服务器配置失败:', error)

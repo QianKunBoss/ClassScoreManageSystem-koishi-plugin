@@ -54,6 +54,8 @@ export interface ApiResponse<T = any> {
   error?: string
   success?: boolean
   message?: string
+  username?: string
+  new_token?: string
   total?: number
   limit?: number
   offset?: number
@@ -103,40 +105,37 @@ export class CsmsApiService {
   }
 
   /**
-   * 验证 Token - 使用自定义的 add_score 接口测试
-   * 注意: 文档未提供专门的 validate_token 接口，用此方法间接验证
+   * 验证 Token - 使用 verify_token 接口
+   * GET /api/global_api.php?action=verify_token&token=xxx
+   * 成功: {"success":true,"message":"token 有效","username":"admin","new_token":"..."}
+   * 失败: {"error":"无效的token，token不存在或已失效"}
    */
-  async validateToken(): Promise<{ valid: boolean; username?: string }> {
+  async validateToken(): Promise<{ valid: boolean; username?: string; newToken?: string }> {
     try {
-      // 尝试调用 add_score 接口（需要有效token），传入无效数据来检测token是否有效
       const url = `${this.baseUrl}/api/global_api.php`
       const params = {
-        action: 'add_score',
-        data: JSON.stringify({
-          username: '__validate__',
-          score_change: 0,
-          description: '__token_validation__'
-        }),
+        action: 'verify_token',
         token: this.token,
       }
-      
+
       this.ctx.logger.info(`验证Token中...`)
       const response = await this.ctx.http.get<ApiResponse>(url, { params })
-      
-      // 如果返回 error: "用户不存在" 或类似，说明 token 有效
-      // 如果返回 error: "未授权" 或 "Token无效"，说明 token 无效
+
       if (response.error) {
-        const errorLower = response.error.toLowerCase()
-        if (errorLower.includes('未授权') || errorLower.includes('token') || errorLower.includes('无效')) {
-          this.ctx.logger.warn(`Token验证失败: ${response.error}`)
-          return { valid: false }
-        }
-        // 其他错误（如用户不存在）说明token有效
-        this.ctx.logger.info(`Token验证成功`)
-        return { valid: true }
+        this.ctx.logger.warn(`Token验证失败: ${response.error}`)
+        return { valid: false }
       }
-      
-      return { valid: true }
+
+      if (response.success) {
+        this.ctx.logger.info(`Token验证成功，用户: ${response.username}`)
+        return {
+          valid: true,
+          username: response.username as string,
+          newToken: response.new_token,
+        }
+      }
+
+      return { valid: false }
     } catch (error: any) {
       this.ctx.logger.error(`Token验证异常:`, error)
       return { valid: false }

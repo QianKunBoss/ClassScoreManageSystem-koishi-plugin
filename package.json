@@ -1,1 +1,39 @@
-{"name":"koishi-plugin-class-score-system","version":"1.0.14","description":"班级操行分管理系统（CSMS） Koishi 插件，CSMS-GitHub：https://github.com/QianKunBoss/ClassScoreManageSystem","type":"commonjs","main":"lib/index.js","typings":"lib/index.d.ts","exports":{".":{"types":"./lib/index.d.ts","require":"./lib/index.js","import":"./lib/index.js"},"./package.json":"./package.json"},"files":["lib","src"],"license":"MIT","scripts":{"build":"node scripts/build.cjs","build:dts":"tsc --emitDeclarationOnly --declaration --outDir=lib","dev":"node scripts/build.cjs --watch"},"keywords":["koishi","plugin","class","score","management"],"peerDependencies":{"koishi":"^4.18.0"},"devDependencies":{"esbuild":"^0.24.0"}}
+{
+  "name": "koishi-plugin-class-score-system",
+  "version": "1.0.19",
+  "description": "班级操行分管理系统（CSMS） Koishi 插件，CSMS-GitHub：https://github.com/QianKunBoss/ClassScoreManageSystem",
+  "type": "commonjs",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "require": "./lib/index.js",
+      "import": "./lib/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib",
+    "src"
+  ],
+  "license": "MIT",
+  "scripts": {
+    "build": "node scripts/build.cjs",
+    "build:dts": "tsc --emitDeclarationOnly --declaration --outDir=lib",
+    "dev": "node scripts/build.cjs --watch"
+  },
+  "keywords": [
+    "koishi",
+    "plugin",
+    "class",
+    "score",
+    "management"
+  ],
+  "peerDependencies": {
+    "koishi": "^4.18.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.24.0"
+  }
+}

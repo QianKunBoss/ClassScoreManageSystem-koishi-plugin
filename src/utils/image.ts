@@ -1,5 +1,26 @@
 import { Context, h } from 'koishi'
 
+export interface ImageConfig {
+  backgroundImage?: string
+  cardOpacity?: number
+}
+
+// 当前插件配置（由 apply() 设置）
+let currentConfig: ImageConfig = {
+  backgroundImage: 'https://api.yppp.net/pe.php',
+  cardOpacity: 0.5,
+}
+
+/** 设置图片配置（由插件 apply() 调用） */
+export function setImageConfig(config: ImageConfig): void {
+  currentConfig = { ...currentConfig, ...config }
+}
+
+/** 获取当前图片配置 */
+export function getImageConfig(): ImageConfig {
+  return { ...currentConfig }
+}
+
 // 通用竖版图片生成函数
 export async function generateImage(
   ctx: Context,
@@ -65,12 +86,15 @@ export async function sendImageOrText(
 }
 
 // 通用基础模板样式
-export function getBaseStyles(): string {
+export function getBaseStyles(config?: ImageConfig): string {
+  const bg = config?.backgroundImage || currentConfig.backgroundImage || 'https://api.yppp.net/pe.php'
+  const opacity = config?.cardOpacity ?? currentConfig.cardOpacity ?? 0.5
+
   return `
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-      background: url('https://api.yppp.net/pe.php') center/cover no-repeat;
+      background: url('${bg}') center/cover no-repeat;
       width: 450px;
       min-height: 800px;
       display: flex;
@@ -79,7 +103,7 @@ export function getBaseStyles(): string {
       padding: 40px 0;
     }
     .container {
-      background: rgba(255, 255, 255, 0.5);
+      background: rgba(255, 255, 255, ${opacity});
       border-radius: 24px;
       padding: 28px 24px;
       width: 380px;

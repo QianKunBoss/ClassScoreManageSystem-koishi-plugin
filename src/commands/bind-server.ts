@@ -43,7 +43,8 @@ export function registerBindServerCommand(ctx: Context, serverService: ServerCon
         }
 
         const actualUsername = result.actualUsername || username
-        const config = await serverService.saveConfig(session.guildId, 'CSMS服务器', address, actualUsername, token)
+        const newToken = result.newToken || token
+        const config = await serverService.saveConfig(session.guildId, 'CSMS服务器', address, actualUsername, newToken)
         
         // 将绑定者自动添加为管理员
         await adminService.addAdmin(session.guildId, openId, '管理员')
@@ -52,7 +53,7 @@ export function registerBindServerCommand(ctx: Context, serverService: ServerCon
         const domain = config.address.replace(/^https?:\/\//, '').split('/')[0]
         ctx.logger.info(`服务器配置成功，domain=${domain}，username=${actualUsername}`)
         
-        return `✅ 服务器配置成功`
+        return `✅ 服务器配置成功，新token已生成，旧token已失效`
       } catch (error: any) {
         ctx.logger.error('保存服务器配置失败:', error)
         return `配置保存失败: ${error.message}`
